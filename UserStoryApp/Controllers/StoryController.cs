@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using UserStoryApp.Repositories.Interfaces;
+using UserStoryApp.Models;
 
 namespace UserStoryApp.Controllers
 {
@@ -65,19 +66,19 @@ namespace UserStoryApp.Controllers
 
         public ActionResult Edit(int id)
         {
-            return View();
+            var model = _storyRepository.GetById(id);
+            return View(model);
         }
 
         //
         // POST: /Story/Edit/5
 
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(Story story)
         {
             try
             {
-                // TODO: Add update logic here
-
+                _storyRepository.Update(story);
                 return RedirectToAction("Index");
             }
             catch

@@ -136,5 +136,27 @@ namespace UserStoryApp.Repositories
                 transaction.Commit();
             }
         }
+
+
+        public Story GetById(int storyId)
+        {
+            using (ISession session = NHibernateHelper.OpenSession())
+            {
+                var query = from story in session.Query<Story>()
+                            where story.Id == storyId
+                            select story;
+                return query.Single();
+            }
+        }
+
+        public void Update(Story story)
+        {
+            using (ISession session = NHibernateHelper.OpenSession())
+            using (ITransaction transaction = session.BeginTransaction())
+            {
+                session.Update(story);
+                transaction.Commit();
+            }
+        }
     }
 }
