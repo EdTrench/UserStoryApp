@@ -17,20 +17,15 @@ namespace UserStoryApp.Mappings
             Map(x => x.Priority);
             Map(x => x.Estimate);
 
-            HasOne(x => x.Parent)
-                .ForeignKey("ParentId");
+            References(x => x.Parent)
+                .Column("ParentId")
+                .Not.LazyLoad();
 
             HasMany(x => x.Children)
                 .KeyColumn("ParentId")
-                .ForeignKeyConstraintName("fk_Story_ParentStory");
-                
-            //<many-to-one name="Parent" class="Equipment" column="ParentId" />
-
-            //<set name="Children" cascade="all-delete-orphan" >
-            //   <key column="ParentId" foreign-key="fk_Equipment_ParentEquipment"/>
-            //   <one-to-many class="Equipment"/>
-            // </set>
-
+                .ForeignKeyConstraintName("fk_Story_ParentStory")
+                .Not.LazyLoad()
+                .Inverse();
         }
     }
 }

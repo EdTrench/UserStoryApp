@@ -1,0 +1,52 @@
+﻿@model IEnumerable<UserStoryApp.Models.Story>
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<table>
+    <tr>
+        <th>
+            @Html.LabelFor(model => Model.First().Id)
+        </th>
+        <th>
+            @Html.LabelFor(model => Model.First().Narrative)
+        </th>
+        <th>
+            @Html.LabelFor(model => Model.First().Priority)
+        </th>
+        <th>
+            @Html.LabelFor(model => Model.First().Estimate)
+        </th>
+    </tr>
+    
+        @foreach (var item in Model)
+        {    
+            <tr>
+            <td>
+                @Html.DisplayFor(model => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Narrative)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Priority)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Estimate)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+            </tr>
+        }
+    
+</table>

@@ -31,18 +31,17 @@ namespace UserStoryApp.Repositories
         {
             using (ISession session = NHibernateHelper.OpenSession())
             {
-                //var sql = "from Story s" +
-                //          " left join fetch s.Children c" +
-                //          " where s.Parent is null";
-                //var story = session.CreateQuery(sql)
-                //    .UniqueResult<Story>();
-                //return story;
+                var sql = "from Story s" +
+                          " left join fetch s.Children c" +
+                          " where s.Parent is null";
+                var story = session.CreateQuery(sql)
+                    .UniqueResult<Story>();
+                return story;
 
-
-                var query = from story in session.Query<Story>()
-                            where story.Parent.Id == 1
-                            select story;
-                return query.Single();
+                //var query = from story in session.Query<Story>()
+                //            where story.Parent.Id == null
+                //            select story;
+                //return query.Single();
 
             }
         }
@@ -60,23 +59,37 @@ namespace UserStoryApp.Repositories
             }
         }
 
+        public ICollection<Story> GetLeafNodes(int storyId)
+        {
+            using (ISession session = NHibernateHelper.OpenSession())
+            {
+                var sql = "select Id, Narrative, ParentId, Priority, Estimate from Story s" +
+                          " where s.ParentId = :id";
+                var list = session.CreateSQLQuery(sql)
+                    .AddEntity(typeof(Story))
+                    .SetInt32("id", storyId)
+                    .List<Story>();
+                return list;
+            }
+        }
+
         public ICollection<Story> GetAllDescendantsOfStory(int storyId)
         {
             using (ISession session = NHibernateHelper.OpenSession())
             {
-                var sql = "with Hierachy(Id, Name, ParentId, Level)" +
+                var sql = "with Hierachy(Id, Narrative, ParentId, Priority, Estimate, Level)" +
                           " as" +
                           " (" +
-                          "   select Id, Name, ParentId, 0 as Level" +
+                          "   select Id, Narrative, ParentId, Priority, Estimate, 0 as Level" +
                           "   from Story s" +
                           "   where s.Id = :id" +
                           "  union all" +
-                          "   select s.Id, s.Name, s.ParentId, eh.Level + 1" +
+                          "   select s.Id, s.Narrative, s.ParentId, s.Priority, s.Estimate, eh.Level + 1" +
                           "   from Story s" +
                           "   inner join Hierachy eh" +
                           "      on s.ParentId = eh.Id" +
                           " )" +
-                          " select Id, Name, ParentId" +
+                          " select Id, Narrative, ParentId, Priority, Estimate" +
                           " from Hierachy" +
                           " where Level > 0";
                 var list = session.CreateSQLQuery(sql)
