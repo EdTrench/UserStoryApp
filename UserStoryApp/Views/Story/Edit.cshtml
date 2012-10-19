@@ -13,11 +13,13 @@
         <legend>Story</legend>
 
         @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.Children)
+        @Html.HiddenFor(model => model.Parent.Id)
 
         <div class="editor-label">
             @Html.LabelFor(model => model.Narrative)
         </div>
-        <div class="editor-field">
+        <div class="editor-field-narrative">
             @Html.EditorFor(model => model.Narrative)
             @Html.ValidationMessageFor(model => model.Narrative)
         </div>

@@ -19,13 +19,14 @@ namespace UserStoryApp.Mappings
 
             References(x => x.Parent)
                 .Column("ParentId")
-                .Not.LazyLoad();
+                .Not.Nullable();
 
             HasMany(x => x.Children)
                 .KeyColumn("ParentId")
                 .ForeignKeyConstraintName("fk_Story_ParentStory")
-                .Not.LazyLoad()
-                .Inverse();
+                .Inverse()
+                .Cascade.SaveUpdate()
+                .Not.LazyLoad();
         }
     }
 }

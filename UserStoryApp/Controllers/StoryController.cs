@@ -79,7 +79,7 @@ namespace UserStoryApp.Controllers
             try
             {
                 _storyRepository.Update(story);
-                return RedirectToAction("Index");
+                return View(story);
             }
             catch
             {
