@@ -104,19 +104,19 @@ namespace UserStoryApp.Repositories
         {
             using (ISession session = NHibernateHelper.OpenSession())
             {
-                var sql = "with Hierachy(Id, Name, ParentId, Level)" +
+                var sql = "with Hierachy(Id, Narrative, ParentId, Priority, Estimate, Level)" +
                           " as" +
                           " (" +
-                          "   select Id, Name, ParentId, 0 as Level" +
+                          "   select Id, Narrative, ParentId, Priority, Estimate, 0 as Level" +
                           "   from Story s" +
                           "   where s.Id = :id" +
                           "  union all" +
-                          "   select s.Id, s.Name, s.ParentId, eh.Level + 1" +
+                          "   select s.Id, s.Narrative, s.ParentId, s.Priority, s.Estimate, eh.Level + 1" +
                           "   from Story s" +
                           "   inner join Hierachy eh" +
                           "      on s.Id = eh.ParentId" +
                           " )" +
-                          " select Id, Name, ParentId" +
+                          " select Id, Narrative, ParentId, Priority, Estimate" +
                           " from Hierachy" +
                           " where Level > 0";
                 var list = session.CreateSQLQuery(sql)
@@ -149,12 +149,33 @@ namespace UserStoryApp.Repositories
             }
         }
 
+        public ICollection<Story> GetByParentId(int id)
+        {
+            using (ISession session = NHibernateHelper.OpenSession())
+            {
+                var query = from story in session.Query<Story>()
+                            where story.Parent.Id == id
+                            select story;
+                return query.ToList();
+            }
+        }
+
         public void Update(Story story)
         {
             using (ISession session = NHibernateHelper.OpenSession())
             using (ITransaction transaction = session.BeginTransaction())
             {
                 session.Update(story);
+                transaction.Commit();
+            }
+        }
+
+        public void Delete(Story story)
+        {
+            using (ISession session = NHibernateHelper.OpenSession())
+            using (ITransaction transaction = session.BeginTransaction())
+            {
+                session.Delete(story);
                 transaction.Commit();
             }
         }

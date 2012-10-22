@@ -7,8 +7,9 @@
 <h2>Details</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
-    @Html.ActionLink("Back", "Back")
+    @Html.ActionLink("Create New", "Create", new { parentId = Model.First().Parent.Id }, null)
+    @Html.Raw(" | ")
+    @Html.ActionLink("Back", "Details", new { parentId = Model.First().Parent.Id, leafNodes = false })
 </p>
 
 <table>
@@ -50,10 +51,10 @@
                 }
                 else
                 {
-                    @Html.Raw("_______")
+                    @Html.ActionLink("Create New Child", "Create", new { parentId = item.Id }, null) 
+                    @Html.Raw(" | ")
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
                 }
-                |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
             </td>
             </tr>
         }

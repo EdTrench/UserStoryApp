@@ -28,32 +28,42 @@ namespace UserStoryApp.Controllers
         //
         // GET: /Story/Details/5
 
-        public ActionResult Details(int id)
+        public ActionResult Details(int id, bool leafNodes = true)
         {
-            //var model = _storyRepository.GetAllDescendantsOfStory(id);
-            var model = _storyRepository.GetLeafNodes(id);
-            return View(model);
+            if (leafNodes)
+            {
+                var model = _storyRepository.GetLeafNodes(id);
+                return View(model);
+            }
+            else
+            {
+                var model = _storyRepository.GetById(id);
+                var parent = _storyRepository.GetByParentId(model.Parent.Id);
+                return View(parent);
+            }
         }
 
         //
         // GET: /Story/Create
 
-        public ActionResult Create()
+        public ActionResult Create(int parentId)
         {
-            return View();
+            var model = new Story();
+            var parent = _storyRepository.GetById(parentId);
+            model.Parent = parent;
+            return View(model);
         }
 
         //
         // POST: /Story/Create
 
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Create(Story story)
         {
             try
             {
-                // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
+                _storyRepository.Add(story);
+                return View("Details", _storyRepository.GetLeafNodes(story.Parent.Id));
             }
             catch
             {
@@ -79,7 +89,7 @@ namespace UserStoryApp.Controllers
             try
             {
                 _storyRepository.Update(story);
-                return View(story);
+                return View("Details", _storyRepository.GetLeafNodes(story.Parent.Id));
             }
             catch
             {
@@ -92,20 +102,21 @@ namespace UserStoryApp.Controllers
 
         public ActionResult Delete(int id)
         {
-            return View();
+            var model = _storyRepository.GetById(id);
+            return View(model);
         }
 
         //
         // POST: /Story/Delete/5
 
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public ActionResult Delete(Story story)
         {
             try
             {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
+                story = _storyRepository.GetById(story.Id);
+                _storyRepository.Delete(story);
+                return View("Details", _storyRepository.GetLeafNodes(story.Parent.Id));
             }
             catch
             {

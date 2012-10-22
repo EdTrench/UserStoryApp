@@ -14,8 +14,10 @@ namespace UserStoryApp.Repositories.Interfaces
         ICollection<Story> GetLeafNodes(int storyId);
         ICollection<Story> GetAllDescendantsOfStory(int storyId);
         ICollection<Story> GetAllAncestorsOfStory(int storyId);
+        ICollection<Story> GetByParentId(int id);
         void Add(Story story);
         Story GetById(int storyId);
         void Update(Story story);
+        void Delete(Story story);
     }
 }
