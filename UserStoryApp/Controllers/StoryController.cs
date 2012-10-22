@@ -116,7 +116,15 @@ namespace UserStoryApp.Controllers
             {
                 story = _storyRepository.GetById(story.Id);
                 _storyRepository.Delete(story);
-                return View("Details", _storyRepository.GetLeafNodes(story.Parent.Id));
+                if (_storyRepository.GetLeafNodes(story.Parent.Id).Count <= 0)
+                {
+                    var next = _storyRepository.GetAllAncestorsOfStory(story.Parent.Id).First();
+                    return View("Details", _storyRepository.GetLeafNodes(next.Id));
+                }
+                else
+                {
+                    return View("Details", _storyRepository.GetLeafNodes(story.Parent.Id));
+                }
             }
             catch
             {
