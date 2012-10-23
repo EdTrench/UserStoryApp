@@ -10,6 +10,8 @@
     @Html.ActionLink("Create New", "Create", new { parentId = Model.First().Parent.Id }, null)
     @Html.Raw(" | ")
     @Html.ActionLink("Back", "Details", new { parentId = Model.First().Parent.Id, leafNodes = false })
+    @Html.Raw(" | ")
+    @Html.ActionLink("Home", "../Home/Index")
 </p>
 
 <table>

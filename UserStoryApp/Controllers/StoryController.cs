@@ -32,14 +32,30 @@ namespace UserStoryApp.Controllers
         {
             if (leafNodes)
             {
-                var model = _storyRepository.GetLeafNodes(id);
-                return View(model);
+                var leaves = _storyRepository.GetLeafNodes(id);
+                if (leaves.Count <= 0)
+                {
+                    var story = _storyRepository.GetById(id);
+                    var parents = _storyRepository.GetByParentId(story.Parent.Id);
+                    return View(parents);
+                }
+                else
+                {
+                    return View(leaves);
+                }
             }
             else
             {
-                var model = _storyRepository.GetById(id);
-                var parent = _storyRepository.GetByParentId(model.Parent.Id);
-                return View(parent);
+                var story = _storyRepository.GetById(id);
+                if (story.Parent != null)
+                {
+                    var parents = _storyRepository.GetByParentId(story.Parent.Id);
+                    return View(parents);
+                }
+                else
+                {
+                    return View("../Home/Index", story);
+                }
             }
         }
 
@@ -116,6 +132,7 @@ namespace UserStoryApp.Controllers
             {
                 story = _storyRepository.GetById(story.Id);
                 _storyRepository.Delete(story);
+                //do we have any leaves left?
                 if (_storyRepository.GetLeafNodes(story.Parent.Id).Count <= 0)
                 {
                     var next = _storyRepository.GetAllAncestorsOfStory(story.Parent.Id).First();
