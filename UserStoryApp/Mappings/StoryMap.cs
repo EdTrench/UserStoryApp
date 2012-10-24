@@ -19,7 +19,8 @@ namespace UserStoryApp.Mappings
 
             References(x => x.Parent)
                 .Column("ParentId")
-                .Not.Nullable();
+                .Not.Nullable()
+                .Not.LazyLoad();
 
             HasMany(x => x.Children)
                 .KeyColumn("ParentId")

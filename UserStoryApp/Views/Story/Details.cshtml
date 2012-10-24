@@ -4,12 +4,13 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h2>Details for Narrative '@Model.First().Parent.Narrative'</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create", new { parentId = Model.First().Parent.Id }, null)
     @Html.Raw(" | ")
-    @Html.ActionLink("Back", "Details", new { parentId = Model.First().Parent.Id, leafNodes = false })
+    @*@Html.ActionLink("Back", "Details", new { parentId = Model.First().Parent.Id, leafNodes = false })*@
+    @Html.ActionLink("Back", "Details", new {id = Model.First().Parent.Id, leafNodes = false })
     @Html.Raw(" | ")
     @Html.ActionLink("Home", "../Home/Index")
 </p>
@@ -60,5 +61,6 @@
             </td>
             </tr>
         }
-    
 </table>
+
+<h5>@Model.Count() item(s)</h5>

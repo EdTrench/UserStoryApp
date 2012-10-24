@@ -4,44 +4,19 @@
     ViewBag.Title = "IndexRoot";
 }
 
-<h2>Index</h2>
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+<h2>Home</h2>
 <table>
     <tr>
         <th>
-            @Html.LabelFor(model => model.Id)
+            @Html.Raw("Welcome!")
         </th>
-        <th>
-            @Html.LabelFor(model => model.Narrative)
-        </th>
-        <th>
-            @Html.LabelFor(model => model.Priority)
-        </th>
-        <th>
-            @Html.LabelFor(model => model.Estimate)
-        </th>
-        <th></th>
     </tr>
-
     <tr>
         <td>
-            @Html.DisplayFor(model => model.Id)
+            @Html.DisplayFor(model => Model.Narrative)
         </td>
         <td>
-            @Html.DisplayFor(model => model.Narrative)
-        </td>
-        <td>
-            @Html.DisplayFor(model => model.Priority)
-        </td>
-        <td>
-            @Html.DisplayFor(model => model.Estimate)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
-            @Html.ActionLink("Details", "../Story/Details", new { id=Model.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id = Model.Id })
+            @Html.ActionLink("Details", "../Story/Details", new { id = Model.Id }) 
         </td>
     </tr>
 </table>

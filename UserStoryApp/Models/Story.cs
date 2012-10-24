@@ -38,5 +38,10 @@ namespace UserStoryApp.Models
                 return true;
             }
         }
+
+        public virtual int Level()
+        {
+            return this.Parent.Id;
+        }
     }
 }

@@ -66,7 +66,7 @@ namespace UserStoryApp.Controllers
         {
             var model = new Story();
             var parent = _storyRepository.GetById(parentId);
-            model.Parent = parent;
+            parent.AddChildStory(model);
             return View(model);
         }
 
