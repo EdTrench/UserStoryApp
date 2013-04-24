@@ -1,0 +1,35 @@
+﻿@model UserStoryApp.Models.Story
+
+@{
+    ViewBag.Title = "Diagram";
+}
+
+<h2>Diagram for '@Model.Narrative'</h2>
+
+<fieldset>
+    <legend>Story</legend>
+
+    <ul>
+        @DisplayNode(Model)
+    </ul>
+
+    @helper DisplayNode(UserStoryApp.Models.Story model)
+    {
+        <li>
+            @Html.DisplayFor(story => model.Narrative)
+            @if(model.Children.Any())
+            {
+                <ul>
+                    @foreach(var child in model.Children)
+                    {
+                        @DisplayNode(child)   
+                    }
+                </ul>
+            }
+        </li>
+    }
+
+</fieldset>
+<p>
+    @Html.ActionLink("Back to List", "Details", new { id = Model.Id })
+</p>

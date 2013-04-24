@@ -16,6 +16,7 @@ namespace UserStoryApp.Mappings
             Map(x => x.Narrative);
             Map(x => x.Priority);
             Map(x => x.Estimate);
+            Map(x => x.Level);
 
             References(x => x.Parent)
                 .Column("ParentId")

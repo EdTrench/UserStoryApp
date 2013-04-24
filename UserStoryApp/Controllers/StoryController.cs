@@ -148,5 +148,14 @@ namespace UserStoryApp.Controllers
                 return View();
             }
         }
+
+        //
+        // Create a Diagram for Children
+        public ActionResult Diagram(int id)
+        {
+            //var model = _storyRepository.GetAllDescendantsOfStory(id);
+            var model = _storyRepository.GetById(id);
+            return View(model);
+        }
     }
 }

@@ -51,6 +51,8 @@
                 @if (item.HasChildren())
                 {
                     @Html.ActionLink("Details", "Details", new { id = item.Id })
+                    @Html.Raw(" | ")
+                    @Html.ActionLink("View Diagram", "Diagram", new { id = item.Id })
                 }
                 else
                 {

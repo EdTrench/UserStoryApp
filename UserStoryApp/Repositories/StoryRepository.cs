@@ -63,7 +63,7 @@ namespace UserStoryApp.Repositories
         {
             using (ISession session = NHibernateHelper.OpenSession())
             {
-                var sql = "select Id, Narrative, ParentId, Priority, Estimate from Story s" +
+                var sql = "select Id, Narrative, ParentId, Priority, Estimate, Level from Story s" +
                           " where s.ParentId = :id";
                 var list = session.CreateSQLQuery(sql)
                     .AddEntity(typeof(Story))
@@ -77,21 +77,21 @@ namespace UserStoryApp.Repositories
         {
             using (ISession session = NHibernateHelper.OpenSession())
             {
-                var sql = "with Hierachy(Id, Narrative, ParentId, Priority, Estimate, Level)" +
+                var sql = "with Hierachy(Id, Narrative, ParentId, Priority, Estimate, Level1, Level)" +
                           " as" +
                           " (" +
-                          "   select Id, Narrative, ParentId, Priority, Estimate, 0 as Level" +
+                          "   select Id, Narrative, ParentId, Priority, Estimate, 0 as Level1, Level" +
                           "   from Story s" +
                           "   where s.Id = :id" +
                           "  union all" +
-                          "   select s.Id, s.Narrative, s.ParentId, s.Priority, s.Estimate, eh.Level + 1" +
+                          "   select s.Id, s.Narrative, s.ParentId, s.Priority, s.Estimate, eh.Level1 + 1, s.Level" +
                           "   from Story s" +
                           "   inner join Hierachy eh" +
                           "      on s.ParentId = eh.Id" +
                           " )" +
-                          " select Id, Narrative, ParentId, Priority, Estimate" +
+                          " select Id, Narrative, ParentId, Priority, Estimate, Level" +
                           " from Hierachy" +
-                          " where Level > 0";
+                          " where Level1 > 0";
                 var list = session.CreateSQLQuery(sql)
                     .AddEntity(typeof(Story))
                     .SetInt32("id", storyId)
