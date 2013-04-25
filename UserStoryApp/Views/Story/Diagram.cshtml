@@ -4,14 +4,33 @@
     ViewBag.Title = "Diagram ";
 }
 
+@section scripts {
+    <script type="text/javascript">
+        $("div.accordion,").accordion({ 
+        autoHeight: false,
+        collapsible: true,
+        active: false,
+        header: "h3" });
+    </script>
+}
+
 <h2>Diagram for '@Model.Narrative'</h2>
 
 <fieldset>
     <legend>Story:</legend>
 
+    
     <ul>
         @DisplayNode(Model)
     </ul>
+     <div id="diagram-container" class="accordion">
+        @DisplayNodeAccordion(Model)
+     </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Back to List ", "Details", new { id = Model.Id })
+</p>
+
 
     @helper DisplayNode(UserStoryApp.Models.Story model)
     {
@@ -29,7 +48,17 @@
         </li>
     }
 
-</fieldset>
-<p>
-    @Html.ActionLink("Back to List ", "Details", new { id = Model.Id })
-</p>
+    @helper DisplayNodeAccordion(UserStoryApp.Models.Story model)
+    {
+        
+            <h3><a href="#">@Html.DisplayFor(story => model.Narrative)</a></h3>
+                if(model.Children.Any())
+                {
+                    <div class="accordion">
+                        @foreach(var child in model.Children)
+                        {
+                            @DisplayNodeAccordion(child)
+                        }
+                    </div>
+                }       
+    }
