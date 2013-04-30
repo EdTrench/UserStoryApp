@@ -7,10 +7,10 @@
 @section scripts {
     <script type="text/javascript">
         $("div.accordion,").accordion({ 
-        autoHeight: false,
+        autoHeight: true,
         collapsible: true,
-        active: false,
-        header: "h3" });
+        active: false
+    });
     </script>
 }
 
@@ -23,9 +23,9 @@
     <ul>
         @DisplayNode(Model)
     </ul>
-     <div id="diagram-container" class="accordion">
-        @DisplayNodeAccordion(Model)
-     </div>
+     @*<div id="diagram-container" class="accordion">*@
+        @*@DisplayNodeAccordion(Model)*@
+     @*</div>*@
 </fieldset>
 <p>
     @Html.ActionLink("Back to List ", "Details", new { id = Model.Id })
@@ -50,15 +50,23 @@
 
     @helper DisplayNodeAccordion(UserStoryApp.Models.Story model)
     {
+        <div class="accordion">
+        <li>
+        @*<h3><a href="#">@Html.DisplayFor(story => model.Narrative)</a></h3>*@
+        @*<h3>@Html.DisplayFor(story => model.Narrative)</h3>*@
+        @Html.DisplayFor(story => model.Narrative)
         
-            <h3><a href="#">@Html.DisplayFor(story => model.Narrative)</a></h3>
-                if(model.Children.Any())
+            @if (model.Children.Any())
+            {
+                <ul>
+                @foreach (var child in model.Children)
                 {
-                    <div class="accordion">
-                        @foreach(var child in model.Children)
-                        {
-                            @DisplayNodeAccordion(child)
-                        }
-                    </div>
-                }       
+                 
+                    @DisplayNodeAccordion(child)
+                 
+                }
+                </ul>
+            } 
+        </li>      
+        </div>
     }

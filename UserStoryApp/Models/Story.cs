@@ -15,7 +15,6 @@ namespace UserStoryApp.Models
         public virtual int Estimate { get; set; }
         public virtual Story Parent { get; set; }
         public virtual ICollection<Story> Children { get; set; }
-        public virtual int Level { get; set; }
                         
         public Story()
         {
